@@ -1,9 +1,10 @@
 import Head from "next/head"
 import Link from "next/link"
+import { Layout } from "../../components/layout"
 
 export default function Recipe() {
   return (
-    <>
+    <Layout>
       <Head>
         <title>Recipe</title>
         <link rel='icon' href='/favicon.ico' />
@@ -12,6 +13,6 @@ export default function Recipe() {
       <Link href='/'>
         <a>Back to home</a>
       </Link>
-    </>
+    </Layout>
   )
 }
