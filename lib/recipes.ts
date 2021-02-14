@@ -5,10 +5,9 @@ import path from "path"
 const recipesDirectory = path.join(process.cwd(), "recipes")
 
 export function getSortedRecipesData(): RecipeData[] {
-  const allFileNames = fs.readdirSync(recipesDirectory)
-  const validFileNames = allFileNames.filter(fileName => /\.md$/.test(fileName))
-  const allRecipesData = validFileNames.map(fileName => {
-    const id = fileName.replace(/\.md$/, "")
+  const fileNames = getAllMDFileNamesFromDirectory(recipesDirectory)
+  const allRecipesData = fileNames.map(fileName => {
+    const id = removeMDExtension(fileName)
 
     const fullPath = path.join(recipesDirectory, fileName)
 
@@ -26,6 +25,31 @@ export function getSortedRecipesData(): RecipeData[] {
   return allRecipesData.sort((a, b) => (a.date < b.date ? 1 : -1))
 }
 
+export function getAllRecipesParamIds(): RecipeParamId[] {
+  const fileNames = getAllMDFileNamesFromDirectory(recipesDirectory)
+  return fileNames.map(fileName => ({ params: { id: removeMDExtension(fileName) } }))
+}
+
+export function getRecipeData(id: string): RecipeData {
+  const fullPath = path.join(recipesDirectory, `${id}.md`)
+  const fileContent = fs.readFileSync(fullPath, "utf8")
+
+  const { data: rawFileMetadata } = matter(fileContent)
+  const fileHeaderInfo = mapMDMetadataToHeaderInfo(rawFileMetadata)
+
+  return { id, ...fileHeaderInfo }
+}
+
+function getAllMDFileNamesFromDirectory(directoryName: string): string[] {
+  const MDfileRegex = /\.md$/
+  const allFileNames = fs.readdirSync(directoryName)
+  return allFileNames.filter(fileName => MDfileRegex.test(fileName))
+}
+
+function removeMDExtension(fileName: string): string {
+  return fileName.replace(/\.md$/, "")
+}
+
 function mapMDMetadataToHeaderInfo(fileMetadata: any): HeaderInfo {
   if (!fileMetadata.title || !fileMetadata.date)
     throw new Error("File metadata is invalid. It has to contain title and date")
@@ -41,3 +65,9 @@ type HeaderInfo = {
 export type RecipeData = {
   id: string
 } & HeaderInfo
+
+type RecipeParamId = {
+  params: {
+    id: string
+  }
+}
