@@ -3,12 +3,12 @@ import Image from "next/image"
 import styles from "./layout.module.css"
 import utilStyles from "../styles/utils.module.css"
 import Link from "next/link"
-import { ReactNode } from "react"
+import { PropsWithChildren } from "react"
 
 const name = "hachene"
 export const siteTitle = "Awesome Cookbook"
 
-export function Layout({ children, home }: LayoutProps) {
+export function Layout({ children, home }: PropsWithChildren<LayoutProps>) {
   return (
     <div className={styles.container}>
       <Head>
@@ -70,4 +70,4 @@ export function Layout({ children, home }: LayoutProps) {
   )
 }
 
-type LayoutProps = { children: ReactNode; home?: boolean }
+type LayoutProps = { home?: boolean }
