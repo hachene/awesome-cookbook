@@ -1,7 +1,7 @@
 import { Layout, siteTitle } from "../components/layout"
 import utilStyles from "../styles/utils.module.css"
 import Head from "next/head"
-import { getSortedRecipesData, RecipeData } from "../recipes/recipes"
+import { getSortedRecipesData, RecipeData } from "../lib/recipes"
 
 export async function getStaticProps() {
   const allRecipesData = getSortedRecipesData()
