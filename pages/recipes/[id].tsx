@@ -8,7 +8,7 @@ export async function getStaticPaths() {
 
 // TODO: Add type safety here
 export async function getStaticProps({ params }: any) {
-  const recipeData = getRecipeData(params.id)
+  const recipeData = await getRecipeData(params.id)
   return {
     props: { recipeData },
   }
@@ -20,6 +20,8 @@ export default function Recipe({ recipeData }: RecipeProps) {
       {recipeData.title}
       <br />
       {recipeData.date}
+      <br />
+      <div dangerouslySetInnerHTML={{ __html: recipeData.recipeContent }} />
     </Layout>
   )
 }

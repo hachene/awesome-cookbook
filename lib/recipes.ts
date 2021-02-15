@@ -1,6 +1,8 @@
 import fs from "fs"
 import matter from "gray-matter"
 import path from "path"
+import remark from "remark"
+import html from "remark-html"
 
 const recipesDirectory = path.join(process.cwd(), "recipes")
 
@@ -22,7 +24,7 @@ export function getSortedRecipesData(): RecipeData[] {
     }
   })
 
-  return allRecipesData.sort((a, b) => (a.date < b.date ? 1 : -1))
+  return allRecipesData.sort((a, b) => (a.date < b.date ? 1 : -1)) as any // FIXME: Remove this any
 }
 
 export function getAllRecipesParamIds(): RecipeParamId[] {
@@ -30,14 +32,15 @@ export function getAllRecipesParamIds(): RecipeParamId[] {
   return fileNames.map(fileName => ({ params: { id: removeMDExtension(fileName) } }))
 }
 
-export function getRecipeData(id: string): RecipeData {
+export async function getRecipeData(id: string): Promise<RecipeData> {
   const fullPath = path.join(recipesDirectory, `${id}.md`)
   const fileContent = fs.readFileSync(fullPath, "utf8")
 
-  const { data: rawFileMetadata } = matter(fileContent)
+  const { data: rawFileMetadata, content: rawFileContent } = matter(fileContent)
   const fileHeaderInfo = mapMDMetadataToHeaderInfo(rawFileMetadata)
+  const recipeContent = await mapMDContentToRecipeInfo(rawFileContent)
 
-  return { id, ...fileHeaderInfo }
+  return { id, recipeContent, ...fileHeaderInfo }
 }
 
 function getAllMDFileNamesFromDirectory(directoryName: string): string[] {
@@ -57,14 +60,23 @@ function mapMDMetadataToHeaderInfo(fileMetadata: any): HeaderInfo {
   return { title: fileMetadata.title, date: fileMetadata.date }
 }
 
+async function mapMDContentToRecipeInfo(rawContent: string): Promise<RecipeInfo> {
+  const processedContent = await remark().use(html).process(rawContent)
+  return processedContent.toString()
+}
+
 type HeaderInfo = {
   title: string
   date: string
 }
+type RecipeInfo = string
 
 export type RecipeData = {
   id: string
-} & HeaderInfo
+  title: string
+  date: string
+  recipeContent: string
+}
 
 type RecipeParamId = {
   params: {
