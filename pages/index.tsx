@@ -1,8 +1,8 @@
-import { Layout, siteTitle } from "../components/layout"
-import utilStyles from "../styles/utils.module.css"
-import Head from "next/head"
-import { getSortedRecipesData, RecipeData } from "../lib/recipes"
-import { GetStaticProps } from "next"
+import { Layout, siteTitle } from '../components/layout'
+import utilStyles from '../styles/utils.module.css'
+import Head from 'next/head'
+import { getSortedRecipesData, RecipeData } from '../lib/recipes'
+import { GetStaticProps } from 'next'
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const allRecipesData = getSortedRecipesData()
