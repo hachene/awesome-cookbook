@@ -1,5 +1,5 @@
+import Home from '@src/pages'
 import { render, screen } from '@testing-library/react'
-import Home from '../../pages'
 
 describe('index', () => {
   it('index renders the welcome message', () => {
