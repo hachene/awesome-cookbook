@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "jest"
+    "test": "jest --watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "gray-matter": "^4.0.2",
@@ -16,16 +19,44 @@
     "remark": "^13.0.0",
     "remark-html": "^13.0.1"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint",
+      "prettier --write"
+    ]
+  },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@types/jest": "^26.0.20",
     "@types/node": "^14.14.27",
     "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.15.2",
+    "@typescript-eslint/parser": "^4.15.2",
+    "babel-eslint": "^10.1.0",
     "babel-jest": "^26.6.3",
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-flowtype": "^5.3.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.5",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-testing-library": "^3.10.1",
+    "husky": "4.3.8",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
     "jest-watch-typeahead": "^0.6.1",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
     "ts-jest": "^26.5.1",
     "typescript": "^4.1.5"
   }
