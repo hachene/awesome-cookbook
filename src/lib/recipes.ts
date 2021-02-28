@@ -4,7 +4,7 @@ import path from 'path'
 import remark from 'remark'
 import html from 'remark-html'
 
-const recipesDirectory = path.join(process.cwd(), 'recipes')
+const recipesDirectory = path.join(process.cwd(), 'src/recipes')
 
 export function getSortedRecipesData(): RecipeData[] {
   const fileNames = getAllMDFileNamesFromDirectory(recipesDirectory)
