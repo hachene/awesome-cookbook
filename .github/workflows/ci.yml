@@ -3,7 +3,7 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  build:
+  build-and-test:
 
     runs-on: ubuntu-latest
 
@@ -15,11 +15,4 @@ jobs:
         node-version: 14.x
     - run: yarn
     - run: yarn build
-  
-  testing:
-
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
     - run: yarn test
