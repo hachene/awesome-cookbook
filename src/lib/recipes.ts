@@ -1,19 +1,19 @@
-import fs from "fs"
-import matter from "gray-matter"
-import path from "path"
-import remark from "remark"
-import html from "remark-html"
+import fs from 'fs'
+import matter from 'gray-matter'
+import path from 'path'
+import remark from 'remark'
+import html from 'remark-html'
 
-const recipesDirectory = path.join(process.cwd(), "recipes")
+const recipesDirectory = path.join(process.cwd(), 'src/recipes')
 
 export function getSortedRecipesData(): RecipeData[] {
   const fileNames = getAllMDFileNamesFromDirectory(recipesDirectory)
-  const allRecipesData = fileNames.map(fileName => {
+  const allRecipesData = fileNames.map((fileName) => {
     const id = removeMDExtension(fileName)
 
     const fullPath = path.join(recipesDirectory, fileName)
 
-    const fileContent = fs.readFileSync(fullPath, "utf8")
+    const fileContent = fs.readFileSync(fullPath, 'utf8')
 
     const { data: rawFileMetadata } = matter(fileContent)
     const fileHeaderInfo = mapMDMetadataToHeaderInfo(rawFileMetadata)
@@ -29,12 +29,12 @@ export function getSortedRecipesData(): RecipeData[] {
 
 export function getAllRecipesParamIds(): RecipeParamId[] {
   const fileNames = getAllMDFileNamesFromDirectory(recipesDirectory)
-  return fileNames.map(fileName => ({ params: { id: removeMDExtension(fileName) } }))
+  return fileNames.map((fileName) => ({ params: { id: removeMDExtension(fileName) } }))
 }
 
 export async function getRecipeData(id: string): Promise<RecipeData> {
   const fullPath = path.join(recipesDirectory, `${id}.md`)
-  const fileContent = fs.readFileSync(fullPath, "utf8")
+  const fileContent = fs.readFileSync(fullPath, 'utf8')
 
   const { data: rawFileMetadata, content: rawFileContent } = matter(fileContent)
   const fileHeaderInfo = mapMDMetadataToHeaderInfo(rawFileMetadata)
@@ -46,16 +46,16 @@ export async function getRecipeData(id: string): Promise<RecipeData> {
 function getAllMDFileNamesFromDirectory(directoryName: string): string[] {
   const MDfileRegex = /\.md$/
   const allFileNames = fs.readdirSync(directoryName)
-  return allFileNames.filter(fileName => MDfileRegex.test(fileName))
+  return allFileNames.filter((fileName) => MDfileRegex.test(fileName))
 }
 
 function removeMDExtension(fileName: string): string {
-  return fileName.replace(/\.md$/, "")
+  return fileName.replace(/\.md$/, '')
 }
 
 function mapMDMetadataToHeaderInfo(fileMetadata: any): HeaderInfo {
   if (!fileMetadata.title || !fileMetadata.date)
-    throw new Error("File metadata is invalid. It has to contain title and date")
+    throw new Error('File metadata is invalid. It has to contain title and date')
 
   return { title: fileMetadata.title, date: fileMetadata.date }
 }

@@ -1,5 +1,5 @@
-import { Layout } from "../../components/layout"
-import { getAllRecipesParamIds, getRecipeData, RecipeData } from "../../lib/recipes"
+import { Layout } from '@src/components/layout'
+import { getAllRecipesParamIds, getRecipeData, RecipeData } from '@src/lib/recipes'
 
 export async function getStaticPaths() {
   const paths = getAllRecipesParamIds()
