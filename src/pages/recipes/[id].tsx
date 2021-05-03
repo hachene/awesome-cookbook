@@ -6,7 +6,7 @@ import utilStyles from '@src/styles/utils.module.css'
 
 export async function getStaticPaths() {
   const paths = getAllRecipesParamIds()
-  return { paths, fallback: false }
+  return { paths, fallback: false } // It may be interesting to evaluate fallback = true or blocking (https://nextjs.org/docs/basic-features/data-fetching#the-fallback-key-required)
 }
 
 // TODO: Add type safety here
