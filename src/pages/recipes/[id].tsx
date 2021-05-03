@@ -1,5 +1,8 @@
 import { Layout } from '@src/components/layout'
 import { getAllRecipesParamIds, getRecipeData, RecipeData } from '@src/lib/recipes'
+import Head from 'next/head'
+import Date from '@src/components/date'
+import utilStyles from '@src/styles/utils.module.css'
 
 export async function getStaticPaths() {
   const paths = getAllRecipesParamIds()
@@ -17,10 +20,13 @@ export async function getStaticProps({ params }: any) {
 export default function Recipe({ recipeData }: RecipeProps) {
   return (
     <Layout>
-      {recipeData.title}
-      <br />
-      {recipeData.date}
-      <br />
+      <Head>
+        <title>{recipeData.title}</title>
+      </Head>
+      <h1 className={utilStyles.headingXl}>{recipeData.title}</h1>
+      <div className={utilStyles.lightText}>
+        <Date dateString={recipeData.date} />
+      </div>
       <div dangerouslySetInnerHTML={{ __html: recipeData.recipeContent }} />
     </Layout>
   )
