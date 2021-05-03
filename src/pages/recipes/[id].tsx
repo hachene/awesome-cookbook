@@ -3,14 +3,15 @@ import { getAllRecipesParamIds, getRecipeData, RecipeData } from '@src/lib/recip
 import Head from 'next/head'
 import Date from '@src/components/date'
 import utilStyles from '@src/styles/utils.module.css'
+import { GetStaticPaths, GetStaticProps } from 'next'
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
   const paths = getAllRecipesParamIds()
   return { paths, fallback: false } // It may be interesting to evaluate fallback = true or blocking (https://nextjs.org/docs/basic-features/data-fetching#the-fallback-key-required)
 }
 
-// TODO: Add type safety here
-export async function getStaticProps({ params }: any) {
+export const getStaticProps: GetStaticProps<RecipeProps, RecipeParams> = async ({ params }) => {
+  if (!params) return { props: { recipeData: undefined } }
   const recipeData = await getRecipeData(params.id)
   return {
     props: { recipeData },
@@ -18,6 +19,7 @@ export async function getStaticProps({ params }: any) {
 }
 
 export default function Recipe({ recipeData }: RecipeProps) {
+  if (!recipeData) return
   return (
     <Layout>
       <Head>
@@ -32,4 +34,5 @@ export default function Recipe({ recipeData }: RecipeProps) {
   )
 }
 
-type RecipeProps = { recipeData: RecipeData }
+type RecipeProps = { recipeData: RecipeData | undefined }
+type RecipeParams = { id: string }
