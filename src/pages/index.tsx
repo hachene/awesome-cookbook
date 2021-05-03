@@ -1,5 +1,7 @@
 import { Layout, siteTitle } from '@src/components/layout'
 import utilStyles from '../styles/utils.module.css'
+import Link from 'next/link'
+import Date from '@src/components/date'
 import Head from 'next/head'
 import { GetStaticProps } from 'next'
 import { getSortedRecipesData, RecipeData } from '@src/lib/recipes'
@@ -25,9 +27,13 @@ export default function Home({ allRecipesData }: HomeProps) {
         <ul className={utilStyles.list}>
           {allRecipesData.map(({ id, date, title }) => (
             <li className={utilStyles.listItem} key={id}>
-              {title}
+              <Link href={`recipes/${id}`}>
+                <a>{title}</a>
+              </Link>
               <br />
-              {date}
+              <small className={utilStyles.lightText}>
+                <Date dateString={date} />
+              </small>
             </li>
           ))}
         </ul>
